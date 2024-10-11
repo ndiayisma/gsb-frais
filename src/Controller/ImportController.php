@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\FicheFrais;
+use App\Entity\FraisForfait;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,15 +77,54 @@ class ImportController extends AbstractController
             $ficheFrais->setMontantValid($fichefraisImport->montantValide);
             $ficheFrais->setNbJustifications($fichefraisImport->nbJustificatifs);
             $ficheFrais->setDateModif(new \DateTime($fichefraisImport->dateModif));
-            $ficheFrais->setEtat($fichefraisImport->idEtat);
+
+            //$user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $fichefraisImport->idVisiteur]);
+
+            switch ($fichefraisImport->idEtat) {
+                case 'RB':
+                    $idEtat = 1; // Remboursé
+                    break;
+                case 'VA':
+                    $idEtat = 2; // Validé
+                    break;
+                case 'CL':
+                    $idEtat = 3; // Clôturé
+                    break;
+                case 'CR':
+                    $idEtat = 4; // Créé
+                    break;
+
+            }
 
 
+            $etat = $this->entityManager->getRepository(Etat::class)->find(['id' => $idEtat]);
+
+
+            $ficheFrais->setEtat($etat);
             $this->entityManager->persist($ficheFrais);
-
 
         }
 
+        $this->entityManager->flush();
+        return $this->render('import/index.html.twig', [
+            'controller_name' => 'ImportController',
+            'data' => $data,
+        ]);
+    }
 
+    #[Route('/import/fichefrais', name: 'app_importFraisForfait')]
+    public function importFraisForfait(): Response
+    {
+        $jsonfile = $this->getParameter('kernel.project_dir') . '/public/fraisforfait.json';
+        $jsondata = file_get_contents($jsonfile);
+        $data = json_decode($jsondata);
+
+        foreach ($data as $fraisForfaitImport) {
+            $fraisForfait = new FraisForfait();
+            $fraisForfait->setMontant($fraisForfaitImport->montant);
+            $fraisForfait->setLibelle($fraisForfaitImport->libelle);
+            $this->entityManager->persist($fraisForfait);
+        }
 
         $this->entityManager->flush();
         return $this->render('import/index.html.twig', [

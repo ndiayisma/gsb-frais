@@ -19,7 +19,7 @@ class FraisForfait
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $montant = null;
 
     /**
