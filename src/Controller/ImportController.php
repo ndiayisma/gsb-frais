@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\FicheFrais;
 use App\Entity\FraisForfait;
+use App\Entity\LigneFraisForfait;
+use App\Entity\LigneFraisHorsForfait;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,6 +53,7 @@ class ImportController extends AbstractController
             $user->setCp($visitor->cp);
             $user->setVille($visitor->ville);
             $user->setDateEmbauche(new \DateTime($visitor->dateEmbauche));
+            $user->setOldId($visitor->id);
 
             $this->entityManager->persist($user);
 
@@ -78,7 +81,7 @@ class ImportController extends AbstractController
             $ficheFrais->setNbJustifications($fichefraisImport->nbJustificatifs);
             $ficheFrais->setDateModif(new \DateTime($fichefraisImport->dateModif));
 
-            //$user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $fichefraisImport->idVisiteur]);
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['oldId' => $fichefraisImport->idVisiteur]);
 
             switch ($fichefraisImport->idEtat) {
                 case 'RB':
@@ -98,6 +101,7 @@ class ImportController extends AbstractController
 
 
             $etat = $this->entityManager->getRepository(Etat::class)->find(['id' => $idEtat]);
+            $ficheFrais->setUser($user);
 
 
             $ficheFrais->setEtat($etat);
@@ -112,18 +116,91 @@ class ImportController extends AbstractController
         ]);
     }
 
-    #[Route('/import/fichefrais', name: 'app_importFraisForfait')]
-    public function importFraisForfait(): Response
+    #[Route('/import/lignefraisforfait', name: 'app_importLigneFraisForfait')]
+    public function importLigneFraisForfait(): Response
     {
-        $jsonfile = $this->getParameter('kernel.project_dir') . '/public/fraisforfait.json';
+        $jsonfile = $this->getParameter('kernel.project_dir') . '/public/lignefraisforfait.json';
         $jsondata = file_get_contents($jsonfile);
         $data = json_decode($jsondata);
 
-        foreach ($data as $fraisForfaitImport) {
-            $fraisForfait = new FraisForfait();
-            $fraisForfait->setMontant($fraisForfaitImport->montant);
-            $fraisForfait->setLibelle($fraisForfaitImport->libelle);
-            $this->entityManager->persist($fraisForfait);
+        foreach ($data as $ligneFraisForfaitImport) {
+            $ligneFraisForfait = new LigneFraisForfait();
+            $ligneFraisForfait->setQuantite($ligneFraisForfaitImport->quantite);
+            $month = \DateTime::createFromFormat('Ym', $ligneFraisForfaitImport->mois);
+            //$ligneFraisForfait->setMois($month);
+            switch ($ligneFraisForfaitImport->idFraisForfait) {
+                case 'ETP':
+                    $idFraisForfait = 1; // Forfait Etape
+                    break;
+                case 'KM':
+                    $idFraisForfait = 2; // Frais Kilométrique
+                    break;
+                case 'NUI':
+                    $idFraisForfait = 3; // Nuitée Hôtel
+                    break;
+                case 'REP':
+                    $idFraisForfait = 4; // Repas Restaurant
+                    break;
+
+            }
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['oldId' => $ligneFraisForfaitImport->idVisiteur]);
+            $ficheFrais = $this->entityManager->getRepository(FicheFrais::class)->findOneBy(['mois' => $month, 'user' => $user]);
+            $fiche = $this->entityManager->getRepository(FraisForfait::class)->find(['id' => $idFraisForfait]);
+
+
+
+            $ligneFraisForfait->setFraisForfait($fiche);
+            $ligneFraisForfait->setFicheFrais($ficheFrais);
+            $this->entityManager->persist($ligneFraisForfait);
+
+        }
+
+        $this->entityManager->flush();
+        return $this->render('import/index.html.twig', [
+            'controller_name' => 'ImportController',
+            'data' => $data,
+        ]);
+    }
+
+
+
+
+    #[Route('/import/lignefraishorsforfait', name: 'app_importLigneFraisHorsForfait')]
+    public function importLigneFraisHorsForfait(): Response
+    {
+        $jsonfile = $this->getParameter('kernel.project_dir') . '/public/lignefraishorsforfait.json';
+        $jsondata = file_get_contents($jsonfile);
+        $data = json_decode($jsondata);
+
+        foreach ($data as $ligneFraisHorsForfaitImport) {
+            $ligneFraisHorsForfait = new LigneFraisHorsForfait();
+            $ligneFraisHorsForfait->setLibelle($ligneFraisHorsForfaitImport->libelle);
+            $ligneFraisHorsForfait->setMontant($ligneFraisHorsForfaitImport->montant);
+            $ligneFraisHorsForfait->setDate(new \DateTime($ligneFraisHorsForfaitImport->date));
+            $ligneFraisHorsForfait->setFicheFrais($this->entityManager->getRepository(User::class)->find(['id' => $ligneFraisHorsForfaitImport->idVisiteur]));
+
+            /*$ligneFraisForfait->setQuantite($ligneFraisForfaitImport->quantite);
+            switch ($ligneFraisForfaitImport->idFraisForfait) {
+                case 'ETP':
+                    $idFraisForfait = 1; // Forfait Etape
+                    break;
+                case 'KM':
+                    $idFraisForfait = 2; // Frais Kilométrique
+                    break;
+                case 'NUI':
+                    $idFraisForfait = 3; // Nuitée Hôtel
+                    break;
+                case 'REP':
+                    $idFraisForfait = 4; // Repas Restaurant
+                    break;
+
+            }
+            $fiche = $this->entityManager->getRepository(FraisForfait::class)->find(['id' => $idFraisForfait]);*/
+
+
+            $ligneFraisHorsForfait->setFicheFrais($this->entityManager->getRepository(FicheFrais::class)->find(['id' => $ligneFraisHorsForfaitImport->idFicheFrais]));
+            $this->entityManager->persist($ligneFraisHorsForfait);
+
         }
 
         $this->entityManager->flush();
