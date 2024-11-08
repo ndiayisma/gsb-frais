@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FicheFraisController!{% endblock %}
+
+{% block body %}
+    <h1>Expense Reports</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Month</th>
+            <th>Amount Validated</th>
+            <th>Number of Justifications</th>
+            <th>Modification Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for fiche in fichesFrais %}
+            <tr>
+                <td>{{ fiche.mois|date('Y-m') }}</td>
+                <td>{{ fiche.montantValid }}</td>
+                <td>{{ fiche.nbJustifications }}</td>
+                <td>{{ fiche.dateModif|date('Y-m-d') }}</td>
+                <td>{{ fiche.etat.libelle }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
