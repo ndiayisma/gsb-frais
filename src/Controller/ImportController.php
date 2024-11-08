@@ -79,7 +79,7 @@ class ImportController extends AbstractController
             $ficheFrais->setMois($month);
             $ficheFrais->setMontantValid($fichefraisImport->montantValide);
             $ficheFrais->setNbJustifications($fichefraisImport->nbJustificatifs);
-            $ficheFrais->setDateModif(new \DateTime($fichefraisImport->dateModif));
+            $ficheFrais->setDateModif(new \DateTime($fichefraisImport->dateModif)); //Enregistrer la date au premier du mois
 
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['oldId' => $fichefraisImport->idVisiteur]);
 
