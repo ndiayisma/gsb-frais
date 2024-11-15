@@ -76,6 +76,7 @@ class ImportController extends AbstractController
         foreach ($data as $fichefraisImport) {
             $ficheFrais = new FicheFrais();
             $month = \DateTime::createFromFormat('Ym', $fichefraisImport->mois);
+            $month->modify('first day of this month');
             $ficheFrais->setMois($month);
             $ficheFrais->setMontantValid($fichefraisImport->montantValide);
             $ficheFrais->setNbJustifications($fichefraisImport->nbJustificatifs);
@@ -127,7 +128,7 @@ class ImportController extends AbstractController
             $ligneFraisForfait = new LigneFraisForfait();
             $ligneFraisForfait->setQuantite($ligneFraisForfaitImport->quantite);
             $month = \DateTime::createFromFormat('Ym', $ligneFraisForfaitImport->mois);
-            //$ligneFraisForfait->setMois($month);
+            $month->modify('first day of this month');
             switch ($ligneFraisForfaitImport->idFraisForfait) {
                 case 'ETP':
                     $idFraisForfait = 1; // Forfait Etape
@@ -145,11 +146,11 @@ class ImportController extends AbstractController
             }
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['oldId' => $ligneFraisForfaitImport->idVisiteur]);
             $ficheFrais = $this->entityManager->getRepository(FicheFrais::class)->findOneBy(['mois' => $month, 'user' => $user]);
-            $fiche = $this->entityManager->getRepository(FraisForfait::class)->find(['id' => $idFraisForfait]);
+            $forfait = $this->entityManager->getRepository(FraisForfait::class)->find(['id' => $idFraisForfait]);
 
 
 
-            $ligneFraisForfait->setFraisForfait($fiche);
+            $ligneFraisForfait->setFraisForfait($forfait);
             $ligneFraisForfait->setFicheFrais($ficheFrais);
             $this->entityManager->persist($ligneFraisForfait);
 
@@ -177,28 +178,12 @@ class ImportController extends AbstractController
             $ligneFraisHorsForfait->setLibelle($ligneFraisHorsForfaitImport->libelle);
             $ligneFraisHorsForfait->setMontant($ligneFraisHorsForfaitImport->montant);
             $ligneFraisHorsForfait->setDate(new \DateTime($ligneFraisHorsForfaitImport->date));
-            $ligneFraisHorsForfait->setFicheFrais($this->entityManager->getRepository(User::class)->find(['id' => $ligneFraisHorsForfaitImport->idVisiteur]));
+            $month = \DateTime::createFromFormat('Ym', $ligneFraisHorsForfaitImport->mois);
+            $month->modify('first day of this month');
 
-            /*$ligneFraisForfait->setQuantite($ligneFraisForfaitImport->quantite);
-            switch ($ligneFraisForfaitImport->idFraisForfait) {
-                case 'ETP':
-                    $idFraisForfait = 1; // Forfait Etape
-                    break;
-                case 'KM':
-                    $idFraisForfait = 2; // Frais Kilométrique
-                    break;
-                case 'NUI':
-                    $idFraisForfait = 3; // Nuitée Hôtel
-                    break;
-                case 'REP':
-                    $idFraisForfait = 4; // Repas Restaurant
-                    break;
-
-            }
-            $fiche = $this->entityManager->getRepository(FraisForfait::class)->find(['id' => $idFraisForfait]);*/
-
-
-            $ligneFraisHorsForfait->setFicheFrais($this->entityManager->getRepository(FicheFrais::class)->find(['id' => $ligneFraisHorsForfaitImport->idFicheFrais]));
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['oldId' => $ligneFraisHorsForfaitImport->idVisiteur]);
+            $ficheFrais = $this->entityManager->getRepository(FicheFrais::class)->findOneBy(['mois' => $month, 'user' => $user]);
+            $ligneFraisHorsForfait->setFicheFrais($ficheFrais);
             $this->entityManager->persist($ligneFraisHorsForfait);
 
         }

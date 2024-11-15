@@ -1,0 +1,16 @@
+{# templates/fiche_frais/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}New FicheFrais{% endblock %}
+
+{% block body %}
+    <h1>Create new FicheFrais</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">Save</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_fiche_frais') }}">back to list</a>
+{% endblock %}

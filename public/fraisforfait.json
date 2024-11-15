@@ -1,4 +1,4 @@
-[
+
 {"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
 {"type":"database","name":"gsb_frais-old"},
 {"type":"table","name":"fraisforfait","database":"gsb_frais-old","data":
@@ -9,4 +9,4 @@
 {"id":"REP","libelle":"Repas Restaurant","montant":"25.00"}
 ]
 }
-]
+
