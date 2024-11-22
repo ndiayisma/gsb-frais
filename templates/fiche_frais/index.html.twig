@@ -5,7 +5,10 @@
 {% block body %}
     <h1>Expense Reports</h1>
 
-    <table>
+    {{ include('fiche_frais/_form.html.twig') }}
+
+
+    <table class="table table-dark table-striped">
         <thead>
         <tr>
             <th>Month</th>
