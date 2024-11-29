@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/fichefrais')]
 final class FicheFraisController extends AbstractController
 {
-    #[Route(name: 'app_fiche_frais', methods: ['GET'])]
+    #[Route(name: 'app_fiche_frais', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser(); // Assuming the user is logged in
@@ -21,11 +21,15 @@ final class FicheFraisController extends AbstractController
 
         $form = $this->createForm(MoisFicheType::class, $fichesFrais);
         $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $fiche = $form->get('fiches')->getData();
+        }
 
 
         return $this->render('fiche_frais/index.html.twig', [
-            'fichesFrais' => $fichesFrais,
-            'form' => $form
+            'form' => $form,
+            'fiche' => $fiche
         ]);
     }
 

@@ -7,29 +7,24 @@
 
     {{ include('fiche_frais/_form.html.twig') }}
 
+    <div class="container">
+        <div class="row">
+            {% if fiche %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ fiche.mois|date('F Y') }}</h5>
+                            <p class="card-text">Amount Validated: {{ fiche.montantValid }}</p>
+                            <p class="card-text">Number of Justifications: {{ fiche.nbJustifications }}</p>
+                            <p class="card-text">Modification Date: {{ fiche.dateModif|date('Y-m-d') }}</p>
+                            <p class="card-text">Status: {{ fiche.etat.libelle }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
-    <table class="table table-dark table-striped">
-        <thead>
-        <tr>
-            <th>Month</th>
-            <th>Amount Validated</th>
-            <th>Number of Justifications</th>
-            <th>Modification Date</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for fiche in fichesFrais %}
-            <tr>
-                <td>{{ fiche.mois|date('Y-m') }}</td>
-                <td>{{ fiche.montantValid }}</td>
-                <td>{{ fiche.nbJustifications }}</td>
-                <td>{{ fiche.dateModif|date('Y-m-d') }}</td>
-                <td>{{ fiche.etat.libelle }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_fiche_frais_new') }}">Create new</a>
+    {#<a href="{{ path('app_fiche_frais_new') }}">Create new</a>#}
 {% endblock %}
