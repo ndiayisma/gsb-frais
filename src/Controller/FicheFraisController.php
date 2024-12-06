@@ -24,6 +24,7 @@ final class FicheFraisController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $fiche = $form->get('fiches')->getData();
+
         }
 
 
@@ -33,11 +34,11 @@ final class FicheFraisController extends AbstractController
         ]);
     }
 
-    /*#[Route('/new', name: 'app_fiche_frais_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_fiche_frais_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $ficheFrais = new FicheFrais();
-        $form = $this->createForm(FicheFraisType::class, $ficheFrais);
+        $form = $this->createForm(MoisFicheType::class, $ficheFrais);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,5 +52,5 @@ final class FicheFraisController extends AbstractController
             'ficheFrais' => $ficheFrais,
             'form' => $form,
         ]);
-    }*/
+    }
 }
