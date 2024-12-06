@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-            {% for fiche in fiche%}
+            {% if fiche%}
                 <div class="col-md-4">
                     <div class="card mb-4">
                         <div class="card-body">
@@ -22,21 +22,54 @@
                     </div>
                 </div>
 
-            {% endfor %}
+            {% endif %}
         </div>
 
     </div>
-    <!--<div class="container">
+    <div class="container">
         <div class="row">
             <div class="col-12">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th
+                            {% for ligne in fiche.ligneFraisForfaits %}
+                                <th>{{ ligne.fraisForfait.libelle }}</th>
+                            {% endfor %}
                         </tr>
-
                     </thead>
+                    <tbody>
+                        {% for ligne in fiche.ligneFraisForfaits %}
+                        <tr>
+                            <td>{{ ligne.quantite }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Justification</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ligne in fiche.ligneFraisHorsForfaits %}
+                            <tr>
+                                <td>{{ ligne.libelle }}</td>
+                                <td>{{ ligne.montant }}</td>
+                                <td>{{ ligne.date|date('Y-m-d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -21,6 +21,7 @@ final class FicheFraisController extends AbstractController
 
         $form = $this->createForm(MoisFicheType::class, $fichesFrais);
         $form->handleRequest($request);
+        $fiche = null; // Initialize the variable
         if ($form->isSubmitted() && $form->isValid()) {
 
             $fiche = $form->get('fiches')->getData();

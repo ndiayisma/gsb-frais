@@ -29,6 +29,7 @@ final class FraisForfaitController extends AbstractController
         $form = $this->createForm(FraisForfaitType::class, $fraisForfait);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($fraisForfait);
             $entityManager->flush();
