@@ -35,10 +35,29 @@ final class FicheFraisController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_fiche_frais_new', methods: ['GET', 'POST'])]
+    #[Route('/saisiefiche', name: 'app_fiche_frais_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser(); // Assuming the user is logged in
+        $mois = $request->query->get('mois'); // Get the month from the request
+
+        // Check if the fiche frais already exists for the user and the given month
+        $existingFicheFrais = $entityManager->getRepository(FicheFrais::class)->findOneBy([
+            'user' => $user,
+            'mois' => $mois,
+        ]);
+
+        if ($existingFicheFrais) {
+            // If the fiche frais already exists, redirect to the existing fiche frais page
+            return $this->redirectToRoute('app_fiche_frais', ['id' => $existingFicheFrais->getId()]);
+        }
+
+
+        // If the fiche frais does not exist, create a new one
         $ficheFrais = new FicheFrais();
+        $ficheFrais->setUser($user);
+        $ficheFrais->setMois($mois);
+
         $form = $this->createForm(MoisFicheType::class, $ficheFrais);
         $form->handleRequest($request);
 
