@@ -44,6 +44,13 @@
                             {% endfor %}
                         </tr>
                         </tbody>
+                        <tbody>
+                        <tr>
+                            {% for ligne in fiche.ligneFraisForfaits %}
+                                <td class="py-2 px-4 border-b">{{ ligne.TotalAmount}} €</td>
+                            {% endfor %}
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
