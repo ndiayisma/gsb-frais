@@ -44,6 +44,7 @@ final class FicheFraisController extends AbstractController
     {
         $user = $this->getUser(); // Assuming the user is logged in
         $date = new \DateTime();
+        $date->modify('first day of this month');
         $mois = $date->format('Y-m');
 
 
@@ -92,6 +93,8 @@ final class FicheFraisController extends AbstractController
         $form = $this->createForm(SaisieFicheFraisType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
 
             return $this->redirectToRoute('app_fiche_frais', ['id' => $ficheFrais->getId()], Response::HTTP_SEE_OTHER);
         }

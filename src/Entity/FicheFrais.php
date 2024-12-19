@@ -40,7 +40,7 @@ class FicheFrais
     /**
      * @var Collection<int, LigneFraisForfait>
      */
-    #[ORM\OneToMany(targetEntity: LigneFraisForfait::class, mappedBy: 'ficheFrais', fetch: 'EAGER')]
+    #[ORM\OneToMany(targetEntity: LigneFraisForfait::class, mappedBy: 'ficheFrais', fetch: 'EAGER', cascade: ['persist', 'remove'])]
     private Collection $ligneFraisForfaits;
 
     #[ORM\ManyToOne(inversedBy: 'fichesDeFrais')]
