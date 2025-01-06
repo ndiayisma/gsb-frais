@@ -16,6 +16,18 @@ class FicheFraisRepository extends ServiceEntityRepository
         parent::__construct($registry, FicheFrais::class);
     }
 
+    public function findTop3ByMonth($mois): array
+    {
+        return $this->createQueryBuilder('ff')
+            ->andWhere('ff.mois = :month')
+            ->setParameter('month', $mois, \Doctrine\DBAL\Types\Types::STRING)
+            ->orderBy('f.totalAmount', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return FicheFrais[] Returns an array of FicheFrais objects
     //     */
