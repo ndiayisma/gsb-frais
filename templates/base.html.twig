@@ -10,10 +10,10 @@
 <body>
 <nav class="bg-gray-800 p-4">
     <div class="container mx-auto flex justify-between items-center">
-        <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold">GSB(oui, ça travaille le homepage... Désolé)</a>
+        <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold">GSB</a>
         <div class="flex space-x-4">
-            <a href="{{ path('app_fiche_frais') }}" class="text-gray-300 hover:text-white">Fiche Frais</a>
-            <a href="{{ path('app_fiche_frais_new') }}" class="text-gray-300 hover:text-white">Saisie Fiche Frais</a>
+            <a href="{{ path('app_fiche_frais') }}" class="text-gray-300 hover:text-white px-3 py-2">Fiche Frais</a>
+            <a href="{{ path('app_fiche_frais_new') }}" class="text-gray-300 hover:text-white px-3 py-2">Saisie Fiche Frais</a>
             {% if app.user %}
                 <a href="{{ path('app_logout') }}" class="bg-blue-500 text-white px-3 py-2 rounded">Logout</a>
             {% else %}

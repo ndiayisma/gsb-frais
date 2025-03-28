@@ -21,18 +21,26 @@ class SaisieFicheFraisType extends AbstractType
         $builder
             ->add('km', IntegerType::class, [
                 'label' => 'Frais Kilometrique',
+                'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
+                'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('etape', IntegerType::class, [
                 'label' => 'Forfait Etape',
+                'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
+                'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('nuit', IntegerType::class, [
                 'label' => 'Nuitée Hôtel',
+                'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
+                'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('resto', IntegerType::class, [
                 'label' => 'Repas Restaurant',
+                'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
+                'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
         ;
