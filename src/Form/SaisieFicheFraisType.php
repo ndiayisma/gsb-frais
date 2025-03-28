@@ -21,24 +21,28 @@ class SaisieFicheFraisType extends AbstractType
         $builder
             ->add('km', IntegerType::class, [
                 'label' => 'Frais Kilometrique',
+                'data' => $options['km'],
                 'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
                 'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('etape', IntegerType::class, [
                 'label' => 'Forfait Etape',
+                'data' => $options['etape'],
                 'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
                 'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('nuit', IntegerType::class, [
                 'label' => 'Nuitée Hôtel',
+                'data' => $options['nuit'],
                 'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
                 'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
             ])
             ->add('resto', IntegerType::class, [
                 'label' => 'Repas Restaurant',
+                'data' => $options['resto'],
                 'label_attr' => ['class' => 'text-sm font-medium text-gray-500'],
                 'row_attr' => ['class' => 'overflow-x-auto bg-white shadow-md rounded-lg relative z-50'],
                 'required' => true,
@@ -49,6 +53,10 @@ class SaisieFicheFraisType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'km' => null,
+            'etape' => null,
+            'nuit' => null,
+            'resto' => null,
 
         ]);
     }

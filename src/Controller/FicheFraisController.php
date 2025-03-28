@@ -101,7 +101,12 @@ final class FicheFraisController extends AbstractController
 
 
         // Si la fiche existe, alors il n'y a pas besoin de le créer, il faudra donc le modifier
-        $formSaisie = $this->createForm(SaisieFicheFraisType::class);
+        $formSaisie = $this->createForm(SaisieFicheFraisType::class,null, [
+            'km' => $ficheFrais->getLigneFraisForfaits()->get(0)->getQuantite(),
+            'etape' => $ficheFrais->getLigneFraisForfaits()->get(1)->getQuantite(),
+            'nuit' => $ficheFrais->getLigneFraisForfaits()->get(2)->getQuantite(),
+            'resto' => $ficheFrais->getLigneFraisForfaits()->get(3)->getQuantite(),
+        ]);
         $formSaisie->handleRequest($request);
         $ligneFraisHorsForfait = new LigneFraisHorsForfait();
         $formHF = $this->createForm(LigneFraisHorsForfaitType::class, $ligneFraisHorsForfait);
@@ -110,6 +115,7 @@ final class FicheFraisController extends AbstractController
 
         if ($formSaisie->isSubmitted() && $formSaisie->isValid()) {
             $data = $formSaisie->getData();
+
             // Mise à jour des quantités des lignes de frais forfait
             $ficheFrais->getLigneFraisForfaits()->get(0)->setQuantite($data['km']);
             $ficheFrais->getLigneFraisForfaits()->get(1)->setQuantite($data['etape']);
@@ -118,9 +124,9 @@ final class FicheFraisController extends AbstractController
 
             $entityManager->persist($ficheFrais);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_fiche_frais', ['id' => $ficheFrais->getId()], Response::HTTP_SEE_OTHER);
-        }
+        }//else{
+            //$formSaisie->get('km')->setData($ficheFrais->getLigneFraisForfaits()->get(0)->getQuantite());
+        //}
 
         if ($formHF->isSubmitted() && $formHF->isValid()) {
             //dd($ligneFraisHorsForfait);
