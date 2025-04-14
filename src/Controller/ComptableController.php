@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ComptableController extends AbstractController
 {
+    #[IsGranted('ROLE_COMPTABLE')]
     #[Route('/comptable', name: 'app_comptable')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
