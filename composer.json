@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/dbal": "^3",
@@ -43,8 +43,7 @@
         "symfony/web-link": "7.1.*",
         "symfony/yaml": "7.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-      "ext-http": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
@@ -53,7 +52,7 @@
             "symfony/runtime": true
         },
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "sort-packages": true
     },
