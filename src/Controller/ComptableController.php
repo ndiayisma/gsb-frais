@@ -112,7 +112,7 @@ final class ComptableController extends AbstractController
         if ($etatValide) {
             $ficheFrais->setEtat($etatValide); // Mettre à jour l'état de la fiche
             $ficheFrais->setDateModif(new \DateTime()); // Mettre à jour la date de modification
-            $ficheFrais->setMontantValid($montantTotal + $ficheFrais->getMontantValid()); // Mettre à jour le montant validé
+            $ficheFrais->setMontantValid($montantTotal); // Mettre à jour le montant validé
 
             $entityManager->flush();
 
