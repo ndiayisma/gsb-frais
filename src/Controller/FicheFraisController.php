@@ -110,7 +110,7 @@ final class FicheFraisController extends AbstractController
         ]);
         $formSaisie->handleRequest($request);
         $ligneFraisHorsForfait = new LigneFraisHorsForfait();
-        $ligneFraisHorsForfait->setAValider(false);
+        $ligneFraisHorsForfait->setAValider(true);
         $formHF = $this->createForm(LigneFraisHorsForfaitType::class, $ligneFraisHorsForfait);
         $formHF->handleRequest($request);
 

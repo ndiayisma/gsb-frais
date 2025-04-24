@@ -98,5 +98,31 @@ final class ComptableController extends AbstractController
         ]);
     }
 
+    #[Route('/comptable/fiche/{id}/valider', name: 'comptable_valider_fiche', methods: ['POST'])]
+    public function validerFiche(FicheFrais $ficheFrais, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer l'état "Validée" (par exemple, avec l'ID correspondant)
+        $etatValide = $entityManager->getRepository(Etat::class)->find(2); // VA = Validée
+        $montantTotal = 0;
+
+        foreach($ficheFrais->getLigneFraisForfaits() as $ligneFraisForfait) {
+            $montantTotal += $ligneFraisForfait->getTotalAmount();
+        }
+
+        if ($etatValide) {
+            $ficheFrais->setEtat($etatValide); // Mettre à jour l'état de la fiche
+            $ficheFrais->setDateModif(new \DateTime()); // Mettre à jour la date de modification
+            $ficheFrais->setMontantValid($montantTotal + $ficheFrais->getMontantValid()); // Mettre à jour le montant validé
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La fiche de frais a été validée avec succès.');
+        } else {
+            $this->addFlash('danger', 'Impossible de valider la fiche : état non trouvé.');
+        }
+
+        return $this->redirectToRoute('app_comptable'); // Redirige vers la liste des fiches
+    }
+
 
 }

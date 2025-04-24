@@ -63,6 +63,11 @@
             </tbody>
         </table>
 
+        <form method="post" action="{{ path('comptable_valider_fiche', { id: ficheFrais.id }) }}">
+            <button type="submit" class="mt-4 inline-block bg-green-500 px-4 py-2 rounded">
+                Valider la fiche
+            </button>
+        </form>
         <a href="{{ path('app_comptable') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Retour</a>
     </div>
 {% endblock %}
