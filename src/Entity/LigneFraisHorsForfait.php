@@ -26,6 +26,9 @@ class LigneFraisHorsForfait
     #[ORM\ManyToOne(inversedBy: 'ligneFraisHorsForfaits')]
     private ?FicheFrais $ficheFrais = null;
 
+    #[ORM\Column]
+    private ?bool $aValider = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class LigneFraisHorsForfait
     public function setFicheFrais(?FicheFrais $ficheFrais): static
     {
         $this->ficheFrais = $ficheFrais;
+
+        return $this;
+    }
+
+    public function getAValider(): ?bool
+    {
+        return $this->aValider;
+    }
+
+    public function setAValider(bool $aValider): static
+    {
+        $this->aValider = $aValider;
 
         return $this;
     }

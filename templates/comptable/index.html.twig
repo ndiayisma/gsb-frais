@@ -29,5 +29,73 @@
                 {% endif %}
             </div>
         </div>
-    </div>,
+
+
+        {% if selectedFiche %}
+            <div class="flex flex-col space-y-8">
+                <!-- First table - Standard expenses -->
+                <div class="w-full overflow-x-auto rounded-xl shadow-md bg-white">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold mb-3">Standard Expenses</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50">
+                                <tr>
+                                    {% for ligne in selectedFiche.ligneFraisForfaits %}
+                                        <th class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.fraisForfait.libelle }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    {% for ligne in selectedFiche.ligneFraisForfaits %}
+                                        <td class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.quantite }}</td>
+                                    {% endfor %}
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    {% for ligne in selectedFiche.ligneFraisForfaits %}
+                                        <td class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.TotalAmount}} €</td>
+                                    {% endfor %}
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second table - Additional expenses -->
+                <div class="w-full overflow-x-auto rounded-xl shadow-md bg-white">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold mb-3">Additional Expenses</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="py-2 px-4 border-b whitespace-nowrap">Justification</th>
+                                    <th class="py-2 px-4 border-b whitespace-nowrap">Amount</th>
+                                    <th class="py-2 px-4 border-b whitespace-nowrap">Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for ligne in selectedFiche.ligneFraisHorsForfaits %}
+                                    <tr>
+                                        <td class="py-2 px-4 border-b">{{ ligne.libelle }}</td>
+                                        <td class="py-2 px-4 border-b">{{ ligne.montant }}</td>
+                                        <td class="py-2 px-4 border-b">{{ ligne.date|date('Y-m-d') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="bg-blue-500 text-white px-4 py-2 mb-2 rounded mt-4">
+                <a href="{{ path('app_comptable_fiche', { 'id': selectedFiche.id }) }}">Détails</a></button>
+            </div>
+
+        {% endif %}
+
 {% endblock %}

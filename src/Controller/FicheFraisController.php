@@ -56,6 +56,7 @@ final class FicheFraisController extends AbstractController
         $user = $this->getUser(); // Assuming the user is logged in
         $mois = new \DateTime();
         $mois->modify('first day of this month');
+        $jour = new \DateTime();
 
 
 
@@ -109,6 +110,7 @@ final class FicheFraisController extends AbstractController
         ]);
         $formSaisie->handleRequest($request);
         $ligneFraisHorsForfait = new LigneFraisHorsForfait();
+        $ligneFraisHorsForfait->setAValider(false);
         $formHF = $this->createForm(LigneFraisHorsForfaitType::class, $ligneFraisHorsForfait);
         $formHF->handleRequest($request);
 
@@ -133,9 +135,10 @@ final class FicheFraisController extends AbstractController
             $dataHF = $formHF->getData();
 
             $ligneFraisHorsForfait = new LigneFraisHorsForfait();
+
             $ligneFraisHorsForfait->setLibelle($dataHF->getLibelle());
             $ligneFraisHorsForfait->setMontant($dataHF->getMontant());
-            $ligneFraisHorsForfait->setDate($mois);
+            $ligneFraisHorsForfait->setDate($jour);
             $ligneFraisHorsForfait->setFicheFrais($ficheFrais);
 
             $ficheFrais->addLigneFraisHorsForfait($ligneFraisHorsForfait);
@@ -150,6 +153,29 @@ final class FicheFraisController extends AbstractController
             'ficheFrais' => $ficheFrais,
             'form' => $formSaisie,
             'formHF' => $formHF
+        ]);
+    }
+
+    #[Route('/{id}/supression_lfhf', name: 'app_fiche_frais_supression_lfhf', methods: ['POST'])]
+    public function deleteLfhf(Request $request, LigneFraisHorsForfait $ligne, EntityManagerInterface $entityManager): Response
+    {
+        // Vérifie si le libellé commence par "REFUSÉ"
+        if (str_starts_with($ligne->getLibelle(), 'REFUSÉ')) {
+            // Vérification du token CSRF
+            if ($this->isCsrfTokenValid('delete' . $ligne->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($ligne);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Ligne hors forfait supprimée.');
+            } else {
+                $this->addFlash('danger', 'Token CSRF invalide.');
+            }
+        } else {
+            $this->addFlash('danger', 'Seules les lignes avec le libellé "REFUSE" peuvent être supprimées.');
+        }
+
+        return $this->redirectToRoute('app_fiche_frais', [
+            'id' => $ligne->getFicheFrais()->getId(),
         ]);
     }
 }

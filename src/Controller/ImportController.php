@@ -178,6 +178,7 @@ class ImportController extends AbstractController
             $ligneFraisHorsForfait->setLibelle($ligneFraisHorsForfaitImport->libelle);
             $ligneFraisHorsForfait->setMontant($ligneFraisHorsForfaitImport->montant);
             $ligneFraisHorsForfait->setDate(new \DateTime($ligneFraisHorsForfaitImport->date));
+            $ligneFraisHorsForfait->setAValider(true);
             $month = \DateTime::createFromFormat('Ym', $ligneFraisHorsForfaitImport->mois);
             $month->modify('first day of this month');
 

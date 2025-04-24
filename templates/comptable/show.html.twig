@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Fiche de Frais{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Détails de la Fiche de Frais</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3>Visiteur : {{ ficheFrais.user.nom }}</h3>
+            <p><strong>Mois :</strong> {{ ficheFrais.mois|date('Y-m') }}</p>
+            <p><strong>Montant Validé :</strong> {{ ficheFrais.montantValid }} €</p>
+            <p><strong>État :</strong> {{ ficheFrais.etat.libelle }}</p>
+            <p><strong>Date de Modification :</strong> {{ ficheFrais.dateModif|date('d/m/Y') }}</p>
+        </div>
+
+        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Forfait</h2>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+            <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="px-4 py-2">Type</th>
+                <th class="px-4 py-2">Quantité</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ligne in ficheFrais.ligneFraisForfaits %}
+                <tr>
+                    <td class="border px-4 py-2">{{ ligne.fraisForfait.libelle }}</td>
+                    <td class="border px-4 py-2">{{ ligne.quantite }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Hors Forfait</h2>
+        <table class="table-auto w-full mt-4">
+            <thead>
+            <tr>
+                <th class="px-4 py-2">Libellé</th>
+                <th class="px-4 py-2">Montant</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ligne in ficheFrais.ligneFraisHorsForfaits %}
+                <tr class="bg-gray-100 hover:bg-gray-200">
+                    <td class="border px-4 py-2">{{ ligne.libelle }}</td>
+                    <td class="border px-4 py-2">{{ ligne.montant }} €</td>
+                    <td class="border px-4 py-2">{{ ligne.date|date('d/m/Y   H:i:s') }}</td>
+                    <td class="px-4 py-2">
+                        <form method="post" action="{{ path('app_comptable_fiche_update', {'id': ligne.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ligne.id) }}">
+                            <button type="submit" class="{{ ligne.aValider ? 'text-green-600 hover:text-green-800' : 'text-red-600 hover:text-red-800'}} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-{{ ligne.aValider ? 'green' : 'red' }}-500">
+                                {{ ligne.aValider ? 'Accepter' : 'Refuser' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_comptable') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Retour</a>
+    </div>
+{% endblock %}
