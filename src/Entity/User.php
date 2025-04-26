@@ -9,11 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -64,6 +65,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $oldId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $googleAuthenticatorSecret = null;
+
+    #[ORM\Column]
+    private ?bool $isTwoFactorActivated = null;
 
     public function __construct()
     {
@@ -267,6 +274,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setOldId(string $oldId): static
     {
         $this->oldId = $oldId;
+
+        return $this;
+    }
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return null !== $this->googleAuthenticatorSecret;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(?string $secret): static
+    {
+        $this->googleAuthenticatorSecret = $secret;
+
+        return $this;
+    }
+
+    public function isTwoFactorActivated(): ?bool
+    {
+        return $this->isTwoFactorActivated;
+    }
+
+    public function setIsTwoFactorActivated(bool $isTwoFactorActivated): static
+    {
+        $this->isTwoFactorActivated = $isTwoFactorActivated;
 
         return $this;
     }

@@ -1,0 +1,12 @@
+# See the configuration reference at https://symfony.com/bundles/SchebTwoFactorBundle/6.x/configuration.html
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
+    google:
+        enabled: true
+        server_name: gsb-frais       # Server name used in QR code
+        issuer: gsb-frais          # Issuer name used in QR code
+        leeway: 15                      # Acceptable time drift in seconds, must be less or equal than 30 seconds
+        template: login/2fa_form.html.twig   # Template used to render the authentication form
+
