@@ -1,78 +1,129 @@
-{# templates/fiche_frais/new.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}New FicheFrais{% endblock %}
+{% block title %}Nouvelle Fiche de Frais{% endblock %}
 
 {% block body %}
+    <div class="bg-gray-50 min-h-screen py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+            <div class="mb-8">
+                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Saisie de Fiche Frais</h1>
+                <p class="mt-2 text-sm text-gray-600">Remplissez les informations ci-dessous pour créer une nouvelle fiche de frais.</p>
+            </div>
 
-    <div class="container mx-auto py-8 px-4 mt-20">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Saisie de Fiche Frais</h1>
-        {{ form_start(form) }}
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(form.km, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}} )}}
-            {{ form_widget(form.km, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(form.km) }}
+            <!-- Frais Forfaitaires -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-xl font-semibold text-gray-800">Frais Forfaitaires</h2>
+                </div>
+                <div class="p-6">
+                    {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.km, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.km, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(form.km, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+
+                        <div class="space-y-2">
+                            {{ form_label(form.etape, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.etape, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(form.etape, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+
+                        <div class="space-y-2">
+                            {{ form_label(form.nuit, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.nuit, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(form.nuit, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+
+                        <div class="space-y-2">
+                            {{ form_label(form.resto, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.resto, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(form.resto, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Valider les frais forfaitaires
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <!-- Frais Hors Forfait -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-xl font-semibold text-gray-800">Frais Hors Forfait</h2>
+                </div>
+                <div class="p-6">
+                    {{ form_start(formHF, {'attr': {'class': 'space-y-6'}}) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(formHF.libelle, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(formHF.libelle, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(formHF.libelle, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+
+                        <div class="space-y-2">
+                            {{ form_label(formHF.montant, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(formHF.montant, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'}}) }}
+                            {{ form_errors(formHF.montant, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Ajouter un frais hors forfait
+                        </button>
+                    </div>
+                    {{ form_end(formHF) }}
+                </div>
+            </div>
+
+            <!-- Liste des Frais Hors Forfait -->
+            {% if ficheFrais.ligneFraisHorsForfaits|length > 0 %}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                        <h2 class="text-xl font-semibold text-gray-800">Liste des Frais Hors Forfait</h2>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Libellé</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            {% for ligne in ficheFrais.ligneFraisHorsForfaits %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ligne.libelle }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ligne.montant }} €</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ligne.date|date('d/m/Y H:i:s') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {# <a href="{{ path('app_fiche_frais_hors_forfait_delete', {'id': ligne.id}) }}" class="text-red-600 hover:text-red-900">Supprimer</a> #}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center mt-8">
+                <a href="{{ path('app_fiche_frais') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Retour à la liste
+                </a>
+            </div>
         </div>
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(form.etape, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}}) }}
-            {{ form_widget(form.etape, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(form.etape) }}
-        </div>
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(form.nuit, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}}) }}
-            {{ form_widget(form.nuit, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(form.nuit) }}
-        </div>
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(form.resto, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}}) }}
-            {{ form_widget(form.resto, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(form.resto) }}
-        </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
-        {{ form_end(form) }}
     </div>
-
-    {{ form_start(formHF) }}
-
-    <div class="container mx-auto py-8 px-4 mt-20">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Saisie de Ligne Frais Hors Forfait</h1>
-        {{ form_start(formHF) }}
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(formHF.libelle, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}} )}}
-            {{ form_widget(formHF.libelle, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(formHF.libelle) }}
-        </div>
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
-            {{ form_label(formHF.montant, null, {'label_attr': {'class': 'text-sm font-medium text-gray-500'}}) }}
-            {{ form_widget(formHF.montant, {'attr': {'class': 'rounded-lg border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'}}) }}
-            {{ form_errors(formHF.montant) }}
-        </div>
-
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter</button>
-        {{ form_end(formHF) }}
-    </div>
-    {{ form_end(formHF) }}
-
-
-    <table class="table-auto w-full mt-4">
-    <thead>
-    <tr>
-        <th class="px-4 py-2">Libellé</th>
-        <th class="px-4 py-2">Montant</th>
-        <th class="px-4 py-2">Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for ligne in ficheFrais.ligneFraisHorsForfaits %}
-        <tr class ="bg-gray-100">
-            <td class="border px-4 py-2">{{ ligne.libelle }}</td>
-            <td class="border px-4 py-2">{{ ligne.montant }} €</td>
-            <td class="border px-4 py-2">{{ ligne.date|date('d/m/Y   H:i:s') }}</td>
-        </tr>
-            {# <a href="{{ path('app_fiche_frais_hors_forfait_delete', {'id': ligne.id}) }}" class="text-red-500 hover:text-red-700">Supprimer</a> #}
-    {% endfor %}
-
-
-    <a href="{{ path('app_fiche_frais') }}">Retour dans la liste</a>
 {% endblock %}

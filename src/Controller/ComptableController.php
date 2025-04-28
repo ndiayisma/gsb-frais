@@ -104,15 +104,24 @@ final class ComptableController extends AbstractController
         // Récupérer l'état "Validée" (par exemple, avec l'ID correspondant)
         $etatValide = $entityManager->getRepository(Etat::class)->find(2); // VA = Validée
         $montantTotal = 0;
+        $nombreJustifications = 0;
 
         foreach($ficheFrais->getLigneFraisForfaits() as $ligneFraisForfait) {
             $montantTotal += $ligneFraisForfait->getTotalAmount();
+        }
+
+        foreach ($ficheFrais->getLigneFraisHorsForfaits() as $ligneFraisHorsForfait) {
+            if (!str_starts_with($ligneFraisHorsForfait->getLibelle(), 'REFUSÉ :')) { // Exclure les lignes supprimées
+                $nombreJustifications++;
+                $montantTotal += $ligneFraisHorsForfait->getMontant();
+            }
         }
 
         if ($etatValide) {
             $ficheFrais->setEtat($etatValide); // Mettre à jour l'état de la fiche
             $ficheFrais->setDateModif(new \DateTime()); // Mettre à jour la date de modification
             $ficheFrais->setMontantValid($montantTotal); // Mettre à jour le montant validé
+            $ficheFrais->setNbJustifications($nombreJustifications); // Mettre à jour le nombre de justificatifs
 
             $entityManager->flush();
 

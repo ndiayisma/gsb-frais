@@ -1,102 +1,173 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FicheFraisController!{% endblock %}
+{% block title %}Détail Fiche de Frais{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 sm:px-4 md:px-8 lg:px-16 xl:px-24 2xl:px-32">
-        <div class="py-8">
-            <h1 class="text-2xl font-bold mb-4">Fiche Frais</h1>
-        </div>
+    <div class="bg-gray-50 min-h-screen py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+            <div class="mb-8">
+                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Fiche de Frais</h1>
+                <p class="mt-2 text-sm text-gray-600">Consultez et gérez vos fiches de frais.</p>
+            </div>
 
-        {{ include('fiche_frais/_form.html.twig') }}
+            <!-- Formulaire -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-xl font-semibold text-gray-800">Saisie</h2>
+                </div>
+                <div class="p-6">
+                    {{ include('fiche_frais/_form.html.twig') }}
+                </div>
+            </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <div class="flex flex-wrap">
-                {% if fiche %}
-                    <div class="bg-white shadow-md rounded-lg p-6">
-                        <div class="bg-white shadow-md rounded-lg mb-8">
-                            <div class="p-4">
-                                <h5 class="text-xl font-semibold mb-2">{{ fiche.mois|date('F Y') }}</h5>
-                                <p class="text-gray-700">Montant Validé: {{ fiche.montantValid }}</p>
-                                <p class="text-gray-700">Nombre de Justifications: {{ fiche.nbJustifications }}</p>
-                                <p class="text-gray-700">Date de Modifia: {{ fiche.dateModif|date('Y-m-d') }}</p>
-                                <p class="text-gray-700">Status: {{ fiche.etat.libelle }}</p>
+            {% if fiche %}
+                <!-- Détails de la fiche -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                        <h2 class="text-xl font-semibold text-gray-800">Détails de la fiche</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-gray-500">Période</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ fiche.mois|date('F Y') }}</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-gray-500">Montant validé</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ fiche.montantValid }} €</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-gray-500">Nombre de justifications</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ fiche.nbJustifications }}</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-gray-500">Dernière modification</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ fiche.dateModif|date('d/m/Y') }}</p>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-gray-500">Statut</p>
+                                <p class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if fiche.etat.libelle == 'Validée' %}
+                                    bg-green-100 text-green-800
+                                {% elseif fiche.etat.libelle == 'Remboursée' %}
+                                    bg-blue-100 text-blue-800
+                                {% elseif fiche.etat.libelle == 'Refusée' %}
+                                    bg-red-100 text-red-800
+                                {% else %}
+                                    bg-yellow-100 text-yellow-800
+                                {% endif %}
+                            ">
+                                    {{ fiche.etat.libelle }}
+                                </p>
                             </div>
                         </div>
                     </div>
-                {% endif %}
+                </div>
+
+                <!-- Frais Forfaitaires -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                        <h2 class="text-xl font-semibold text-gray-800">Frais Forfaitaires</h2>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                {% for ligne in fiche.ligneFraisForfaits %}
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ ligne.fraisForfait.libelle }}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                {% for ligne in fiche.ligneFraisForfaits %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ ligne.quantite }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="bg-gray-50">
+                                {% for ligne in fiche.ligneFraisForfaits %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ ligne.TotalAmount }} €
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Frais Hors Forfait -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                        <h2 class="text-xl font-semibold text-gray-800">Frais Hors Forfait</h2>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Justification</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            {% for ligne in fiche.ligneFraisHorsForfaits %}
+                                <tr class="{% if ligne.libelle starts with 'REFUSÉ' %}bg-red-50{% else %}hover:bg-gray-50{% endif %}">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {% if ligne.libelle starts with 'REFUSÉ' %}text-red-900{% else %}text-gray-900{% endif %}">
+                                        {{ ligne.libelle }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ ligne.montant }} €
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ ligne.date|date('d/m/Y') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {% if ligne.libelle starts with 'REFUSÉ' %}
+                                            <form action="{{ path('app_fiche_frais_supression_lfhf', { id: ligne.id }) }}" method="post" class="inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ligne.id) }}">
+                                                <button type="submit" class="text-red-600 hover:text-red-900 font-medium">
+                                                    Supprimer
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            {% if fiche.ligneFraisHorsForfaits|length == 0 %}
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        Aucun frais hors forfait enregistré
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="p-6 text-center">
+                        <p class="text-gray-500">Aucune fiche de frais sélectionnée</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center mt-8">
+                <a href="{{ path('app_home') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Retour à l'accueil
+                </a>
             </div>
         </div>
-
-        {% if fiche %}
-            <div class="flex flex-col space-y-8">
-                <!-- First table - Standard expenses -->
-                <div class="w-full overflow-x-auto rounded-xl shadow-md bg-white">
-                    <div class="p-4">
-                        <h2 class="text-lg font-semibold mb-3">Standard Expenses</h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    {% for ligne in fiche.ligneFraisForfaits %}
-                                        <th class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.fraisForfait.libelle }}</th>
-                                    {% endfor %}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    {% for ligne in fiche.ligneFraisForfaits %}
-                                        <td class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.quantite }}</td>
-                                    {% endfor %}
-                                </tr>
-                                </tbody>
-                                <tbody>
-                                <tr>
-                                    {% for ligne in fiche.ligneFraisForfaits %}
-                                        <td class="py-2 px-4 border-b whitespace-nowrap">{{ ligne.TotalAmount}} €</td>
-                                    {% endfor %}
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Second table - Additional expenses -->
-                <div class="w-full overflow-x-auto rounded-xl shadow-md bg-white">
-                    <div class="p-4">
-                        <h2 class="text-lg font-semibold mb-3">Additional Expenses</h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="py-2 px-4 border-b whitespace-nowrap">Justification</th>
-                                    <th class="py-2 px-4 border-b whitespace-nowrap">Amount</th>
-                                    <th class="py-2 px-4 border-b whitespace-nowrap">Date</th>
-                                    <th class="py-2 px-4 border-b whitespace-nowrap">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for ligne in fiche.ligneFraisHorsForfaits %}
-                                    <tr>
-                                        <td class="py-2 px-4 border-b">{{ ligne.libelle }}</td>
-                                        <td class="py-2 px-4 border-b">{{ ligne.montant }}</td>
-                                        <td class="py-2 px-4 border-b">{{ ligne.date|date('Y-m-d') }}</td>
-                                        <td class="py-2 px-4 border-b">
-                                            {% if ligne.libelle starts with 'REFUSÉ' %}
-                                                <form action="{{ path('app_fiche_frais_supression_lfhf', { id: ligne.id }) }}" method="post">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ligne.id) }}">
-                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
-                                                </form>
-                                            {% endif %}
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     </div>
 {% endblock %}
