@@ -14,7 +14,7 @@
             <p><strong>Date de Modification :</strong> {{ ficheFrais.dateModif|date('d/m/Y') }}</p>
         </div>
 
-        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Forfait</h2>
+        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Forfait : {{ ficheFrais.getTotalFraisForfaitises() }}</h2>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
             <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -34,10 +34,11 @@
         </table>
         </div>
 
-        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Hors Forfait</h2>
+        <h2 class="text-xl font-semibold mt-6">Lignes de Frais Hors Forfait : {{ ficheFrais.getTotalLFHF }}</h2>
         <table class="table-auto w-full mt-4">
             <thead>
             <tr>
+                <th class="px-4 py-2">Catégorie</th>
                 <th class="px-4 py-2">Libellé</th>
                 <th class="px-4 py-2">Montant</th>
                 <th class="px-4 py-2">Date</th>
@@ -47,6 +48,7 @@
             <tbody>
             {% for ligne in ficheFrais.ligneFraisHorsForfaits %}
                 <tr class="bg-gray-100 hover:bg-gray-200">
+                    <td class="border px-4 py-2">{{ ligne.categorie }}</td>
                     <td class="border px-4 py-2">{{ ligne.libelle }}</td>
                     <td class="border px-4 py-2">{{ ligne.montant }} €</td>
                     <td class="border px-4 py-2">{{ ligne.date|date('d/m/Y   H:i:s') }}</td>

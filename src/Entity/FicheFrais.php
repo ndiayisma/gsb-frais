@@ -188,4 +188,30 @@ class FicheFrais
 
         return $this;
     }
+
+    public function getTotalFrais(): float
+    {
+        return $this->getTotalFraisForfaitises() + $this->getTotalLFHF();
+    }
+
+    public function getTotalFraisForfaitises(): float
+    {
+        $total = 0;
+        foreach ($this->getLigneFraisForfaits() as $ligneFraisForfait) {
+            $total += $ligneFraisForfait->getTotalAmount();
+        }
+        return $total;
+    }
+
+    public function getTotalLFHF(): float
+    {
+        $total = 0;
+        foreach ($this->getLigneFraisHorsForfaits() as $ligneFraisHorsForfait) {
+            if (stripos($ligneFraisHorsForfait->getLibelle(), 'REFUSÉ') === false) {
+                $total += $ligneFraisHorsForfait->getMontant();
+            }
+
+        }
+        return $total;
+    }
 }

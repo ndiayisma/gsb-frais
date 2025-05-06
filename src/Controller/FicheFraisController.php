@@ -110,7 +110,7 @@ final class FicheFraisController extends AbstractController
         ]);
         $formSaisie->handleRequest($request);
         $ligneFraisHorsForfait = new LigneFraisHorsForfait();
-        $ligneFraisHorsForfait->setAValider(true);
+        $ligneFraisHorsForfait->setAValider(false);
         $formHF = $this->createForm(LigneFraisHorsForfaitType::class, $ligneFraisHorsForfait);
         $formHF->handleRequest($request);
 
@@ -136,6 +136,7 @@ final class FicheFraisController extends AbstractController
 
             $ligneFraisHorsForfait = new LigneFraisHorsForfait();
 
+            $ligneFraisHorsForfait->setCategorie($dataHF->getCategorie());
             $ligneFraisHorsForfait->setLibelle($dataHF->getLibelle());
             $ligneFraisHorsForfait->setMontant($dataHF->getMontant());
             $ligneFraisHorsForfait->setDate($jour);

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\FicheFrais;
 use App\Entity\LigneFraisHorsForfait;
+use App\Entity\Categorie;
 use App\Entity\LigneFraisForfait;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -20,10 +21,10 @@ class LigneFraisHorsForfaitType extends AbstractType
                 'widget' => 'single_text',
             ])*/
             ->add('montant')
-            /*->add('ficheFrais', EntityType::class, [
-                'class' => FicheFrais::class,
-                'choice_label' => 'id',
-            ])*/
+            ->add('categorie', EntityType::class, [
+                'class' => Categorie::class,
+                'choice_label' => 'libelle',
+            ])
         ;
     }
 

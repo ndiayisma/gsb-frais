@@ -29,6 +29,9 @@ class LigneFraisHorsForfait
     #[ORM\Column]
     private ?bool $aValider = true;
 
+    #[ORM\ManyToOne(inversedBy: 'ligneFraisHorsForfaits')]
+    private ?Categorie $categorie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class LigneFraisHorsForfait
     public function setAValider(bool $aValider): static
     {
         $this->aValider = $aValider;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
